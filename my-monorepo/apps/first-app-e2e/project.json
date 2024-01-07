@@ -1,0 +1,30 @@
+{
+  "name": "first-app-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/first-app-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/first-app-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "first-app:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "first-app:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "first-app:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "implicitDependencies": ["first-app"],
+  "tags": []
+}
