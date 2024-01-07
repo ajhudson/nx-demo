@@ -66,4 +66,6 @@ The app should render the label showing we can easily add components that can be
 
 18. Repeat the previous step for _second-app_.
 
-19. Check in the repo in it's current state.
+19. Commit the repo into git in its current state.
+
+20. If you now run `pnpm nx show projects --affected` it should return nothing as there are no new changes. But if you make a small change to the [boring-label.tsx](./my-monorepo/libs/boring-label/src/lib/boring-label.tsx) component, check the change into git, then re-run it'll show
