@@ -9,7 +9,9 @@ For a mono-repo, we're interested in the _integrated repo_ so that every app/lib
 
 This tutorial is based from NX's [integrated monorepo tutorial](https://nx.dev/getting-started/tutorials/integrated-repo-tutorial).
 
-[pnpm](https://pnpm.io/) will be used as the package manager. In the tutorial steps below, you could substitute `pnpm <command>` with [pnpm dlx](https://pnpm.io/cli/dlx) to hotload a package without installing it, so it's the equivalent of NPM's `npx` commad.
+[pnpm](https://pnpm.io/) will be used as the package manager. In the tutorial steps below, you could substitute `pnpm <command>` with [pnpm dlx](https://pnpm.io/cli/dlx) to hotload a package without installing it, so it's the equivalent of NPM's `npx` command.
+
+When following this tutorial, ensure it is in a folder which has been initialised as a git repo.
 
 1. Install PNPM by running a Powershell terminal `iwr https://get.pnpm.io/install.ps1 -useb | iex`
 
@@ -33,8 +35,35 @@ This tutorial is based from NX's [integrated monorepo tutorial](https://nx.dev/g
 
 11. We can run _second-app_ with `pnpm nx serve second-app`. Watch out that the port number generated is also 4200, the same as _first-app_ but you can change it by modifying [second-app/project.json](./my-monorepo/apps/second-app/project.json) and a `port` property in _targets > serve > options_ as per the [instructions on this blog](https://medium.com/@donald.murillo07/how-to-change-the-default-port-for-any-nx-project-with-2-simple-tricks-c02b0741b9b3). You can also simply run `pnpm nx serve second-app --port=4201`.
 
-12. We have two apps and we can build them concurrently with `pnpm nx run-many -t build`
+12. We can run multiple apps at the same time with `pnpm nx run-many -t serve`
 
-13. If we run the same command again, it will be much quicker because of the caching. This is stored in the _.nx/cache_ folder locally. For CI/CD pipelines, the cache is stored remote at https://cloud.nx.app.
+13. We have two apps and we can build them concurrently with `pnpm nx run-many -t build`
 
-14. Check in the current state of the repo.
+14. If we run the same command again, it will be much quicker because of the caching. This is stored in the _.nx/cache_ folder locally. For CI/CD pipelines, the cache is stored remote at https://cloud.nx.app.
+
+15. Check in the current state of the repo with `git add .` and `git commit -m "initial commit"`, then make a minor change to one of the apps. Running `pnpm nx show projects --affected` should show what has changed. Adding the `--json` flag will print out the result in a different format.
+
+16. We will now add a React component that can be used in both apps with `pnpm nx g @nx/react:lib boring-label --directory=libs/boring-label --publishable --importPath=@my-monorepo/boring-label` (afterwards you can check _tsconfig.base.json_ to see the new component registered)
+
+17. This will create a boilerplate component for us. Now we can import it into our React app. Find _app.tsx_ in _first-app_ and then add the following at the top of the file:
+
+```
+import { BoringLabel } from '@my-monorepo/boring-label'
+```
+
+and then place the component somewhere in the _App_ component:
+
+```
+export function App() {
+  return (
+    <StyledApp>
+      <BoringLabel />
+      ...
+    </StyledApp>
+```
+
+The app should render the label showing we can easily add components that can be shared amongst other apps.
+
+18. Repeat the previous step for _second-app_.
+
+19. Check in the repo in it's current state.
