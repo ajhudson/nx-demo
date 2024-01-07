@@ -68,4 +68,22 @@ The app should render the label showing we can easily add components that can be
 
 19. Commit the repo into git in its current state.
 
-20. If you now run `pnpm nx show projects --affected` it should return nothing as there are no new changes. But if you make a small change to the [boring-label.tsx](./my-monorepo/libs/boring-label/src/lib/boring-label.tsx) component, check the change into git, then re-run it'll show
+20. If you now run `pnpm nx show projects --affected --uncommitted` it should return nothing as there are no new changes. But if you make a small change to the [boring-label.tsx](./my-monorepo/libs/boring-label/src/lib/boring-label.tsx) it will show that _boring-label_ has indeed changed. However, what we really want is to show the altered component AND it's dependencies as then we can tell the CI/CD pipeline which applications it needs to deploy. So we need to find [nx.json](./my-monorepo/nx.json) and add the following as per [these instructions](https://nx.dev/core-tutorial/05-auto-detect-dependencies):
+
+```
+{
+    ...
+    "pluginsConfig": {
+            "@nx/js": {
+            "analyzeSourceFiles": true
+        }
+    }
+    ...
+}
+```
+
+21. If we re-run `pnpm nx show projects --affected --uncommitted` then we will see the _boring-label_ and also the apps that use it.
+
+22. If we run `pnpm nx show projects --affected --uncommitted -t serve` then we can ignore the end-to-end tests from the resulting output. So we've changed a shared component but NX can work out which apps rely on it.
+
+23. By running `pnpm nx graph` then NX will spin up a web server and render a dependency graph too.
