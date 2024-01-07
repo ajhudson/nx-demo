@@ -15,7 +15,7 @@ When following this tutorial, ensure it is in a folder which has been initialise
 
 1. Install PNPM by running a Powershell terminal `iwr https://get.pnpm.io/install.ps1 -useb | iex`
 
-2. Install NX as a global tool `pnpm add nx -g`
+2. Install NX as a global tool with `pnpm add nx -g` and then install the NX workspace creation tool as a global tool with `pnpm add create-nx-workspace -g`
 
 3. Verify global tools are installed with `pnpm list -g`
 
